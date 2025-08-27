@@ -1,0 +1,195 @@
+/* Import Tailwind CSS layers */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Professional Floating Sidebar Toggle Button (Hamburger) */
+#sidebar-toggle-container {
+  @apply fixed top-8 left-8 z-50;
+}
+
+#sidebar-toggle-container button {
+  @apply bg-white/95 backdrop-blur-md text-gray-700 p-3 rounded-2xl shadow-xl hover:shadow-2xl border border-gray-200/60 hover:border-gray-300/80 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-2 hover:scale-105 active:scale-95;
+}
+
+/* Cross button inside sidebar header */
+#sidebar-close {
+  @apply p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50;
+}
+
+#sidebar-close:hover {
+  @apply bg-gray-100 text-gray-700;
+}
+
+#sidebar-close:active {
+  @apply bg-gray-200 scale-95;
+}
+
+/* Enhanced sidebar styles - FIXED WIDTH */
+.sidebar {
+  @apply absolute top-0 left-0 w-80 h-screen bg-white shadow-strong z-40 overflow-y-auto transition-all duration-300 ease-out;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed {
+  transform: translateX(-320px);
+}
+
+.layer-group {
+  @apply border-b border-gray-200 transition-all duration-200 ease-in-out;
+}
+
+.layer-group:hover {
+  @apply bg-gray-50;
+}
+
+.layer-group-header {
+  @apply cursor-pointer p-3 transition-all duration-200 ease-in-out rounded-lg mx-2 hover:bg-gray-100 active:bg-gray-200 flex items-center justify-between;
+}
+
+.layer-item {
+  @apply p-3 mx-2 cursor-pointer transition-all duration-200 ease-in-out rounded-lg text-sm text-gray-700 relative overflow-hidden;
+}
+
+.layer-item:hover {
+  @apply bg-gray-100 transform translate-x-1;
+}
+
+/* Layer item active state with indicator */
+.layer-item.active {
+  @apply bg-primary-100 text-primary-800 font-medium shadow-soft relative;
+}
+
+.layer-item.active::before {
+  content: '';
+  @apply absolute left-0 top-0 bottom-0 w-1 bg-primary-500 rounded-r-sm;
+}
+
+/* Active indicator (checkmark) */
+.layer-active-indicator {
+  @apply absolute right-3 top-1/2 transform -translate-y-1/2;
+}
+
+/* Layer count badges in group headers */
+.layer-count-badge {
+  @apply ml-2 text-xs font-medium px-2 py-1 rounded-full transition-all duration-200;
+}
+
+.layer-item:active {
+  @apply transform translate-x-0.5 bg-gray-200;
+}
+
+/* Layer group animations - FIXED DROPDOWN */
+.layer-group-layers {
+  @apply transition-all duration-300 ease-out;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.layer-group-layers.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.layer-group-layers.expanded {
+  max-height: 500px;
+  opacity: 1;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Arrow rotation animation */
+.layer-group-arrow {
+  @apply transition-transform duration-300 ease-out;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layer-group-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Search input enhancements */
+.search-input {
+  @apply transition-all duration-200 ease-in-out border-2 border-transparent;
+}
+
+.search-input:focus {
+  @apply border-primary-500 shadow-soft;
+}
+
+/* Loading states */
+.layer-item.loading {
+  @apply opacity-60 pointer-events-none;
+}
+
+.layer-item.loading::after {
+  content: '';
+  @apply absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 border-2 border-gray-200 border-t-primary-500 rounded-full animate-spin;
+}
+
+/* Error states */
+.layer-item.error {
+  @apply text-error-600 italic bg-error-50 border-l-4 border-l-error-500;
+}
+
+/* Success states */
+.layer-item.success {
+  @apply text-success-600 bg-success-50 border-l-4 border-l-success-500;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .sidebar {
+    @apply w-full max-w-sm;
+  }
+  
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+  
+  .layer-item {
+    @apply p-4 text-base;
+  }
+  
+  #sidebar-toggle-container {
+    @apply top-4 left-4;
+  }
+}
+
+/* Accessibility improvements */
+.layer-item:focus {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+
+.layer-group-header:focus {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    @apply bg-gray-900 text-gray-100;
+  }
+  
+  .layer-item {
+    @apply text-gray-300;
+  }
+  
+  .layer-item:hover {
+    @apply bg-gray-800;
+  }
+  
+  .layer-item.active {
+    @apply bg-primary-900 text-primary-100;
+  }
+  
+  #sidebar-toggle-container button {
+    @apply bg-gray-800/95 text-gray-200 border-gray-600/60 hover:border-gray-500/80;
+  }
+  
+  #sidebar-close {
+    @apply text-gray-400 hover:text-gray-200 hover:bg-gray-800;
+  }
+}

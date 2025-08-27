@@ -1,0 +1,132 @@
+/* Import Tailwind CSS layers */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* MapLibre GL JS customizations */
+.mapboxgl-popup-content {
+  @apply rounded-lg shadow-strong border-0;
+}
+
+.mapboxgl-popup-close-button {
+  @apply text-gray-500 hover:text-gray-700 transition-colors duration-200;
+}
+
+/* Map container styles */
+.map-container {
+  @apply flex-1 h-full;
+}
+
+.map-canvas {
+  @apply w-full h-full;
+}
+
+/* Info panel styles - Absolutely positioned like sidebar */
+.info-panel {
+  @apply absolute top-0 right-0 w-96 h-screen bg-white shadow-strong z-40 transition-all duration-300 ease-out;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.info-panel.collapsed {
+  transform: translateX(100%);
+}
+
+/* Info panel reopen button styles */
+#info-reopen-container {
+  @apply fixed top-8 right-8 z-50;
+}
+
+#info-reopen {
+  @apply bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 hover:border-blue-800;
+}
+
+/* Info panel content area */
+#info-content {
+  @apply flex-1 overflow-y-auto p-4 w-full;
+  min-height: 0; /* Allow flex to control height */
+}
+
+/* Info panel header */
+.info-panel > div:first-child {
+  @apply flex-shrink-0;
+}
+
+/* Info panel collapse button styles */
+#info-collapse {
+  @apply bg-red-600 text-white hover:bg-red-700 font-medium;
+  @apply border-2 border-red-700 hover:border-red-800;
+  @apply shadow-lg hover:shadow-xl;
+  @apply transform hover:scale-105 active:scale-95;
+}
+
+#info-collapse svg {
+  @apply w-4 h-4;
+}
+
+/* Info panel toggle button styles */
+#info-toggle-container {
+  @apply fixed top-8 right-8 z-50;
+}
+
+#info-toggle {
+  @apply bg-white/95 backdrop-blur-md text-gray-700 p-3 rounded-2xl shadow-xl hover:shadow-2xl border border-gray-200/60 hover:border-gray-300/80 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-2 hover:scale-105 active:scale-95;
+}
+
+#info-toggle svg {
+  @apply w-6 h-6 transition-transform duration-300;
+}
+
+#info-toggle:hover svg {
+  @apply rotate-12;
+}
+
+/* Info panel content styles */
+#info-panel {
+  @apply bg-white border-l border-gray-200;
+}
+
+#info-panel h2 {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+#info-close {
+  @apply p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50;
+}
+
+#info-close:hover {
+  @apply bg-gray-100 text-gray-700;
+}
+
+#info-close:active {
+  @apply bg-gray-200 scale-95;
+}
+
+/* Info panel content area */
+#info-content {
+  @apply flex-1 overflow-y-auto;
+}
+
+/* Dark mode support for map elements */
+@media (prefers-color-scheme: dark) {
+  .info-panel {
+    @apply bg-gray-800 text-gray-100 border-gray-700;
+  }
+  
+  #info-panel h2 {
+    @apply text-gray-100;
+  }
+  
+  #info-close {
+    @apply text-gray-400 hover:text-gray-200 hover:bg-gray-700;
+  }
+  
+  #info-close:hover {
+    @apply bg-gray-700 text-gray-200;
+  }
+  
+  #info-close:active {
+    @apply bg-gray-600;
+  }
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Anaerobic Digestion Mapping Application</title>
+    <meta name="description" content="Comprehensive geospatial mapping application for anaerobic digestion site selection and planning across the UK">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- MapLibre GL JS -->
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Papa Parse -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    
+    <!-- TopoJSON Client -->
+    <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    
+    <!-- Fuse.js -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    
+    <!-- Turf.js -->
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="/src/styles/base.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+    <link rel="stylesheet" href="/src/styles/sidebar.css">
+    <link rel="stylesheet" href="/src/styles/map.css">
+    <link rel="stylesheet" href="/src/styles/utilities.css">
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- Professional Floating Sidebar Toggle Button (Hamburger) -->
+    <div id="sidebar-toggle-container" class="fixed top-8 left-8 z-50 hidden">
+        <button id="sidebar-toggle" class="group bg-white/95 backdrop-blur-md text-gray-700 p-3 rounded-2xl shadow-xl hover:shadow-2xl border border-gray-200/60 hover:border-gray-300/80 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-2 hover:scale-105 active:scale-95">
+            <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl font-semibold text-gray-900">UK AD Mapping</h1>
+                <!-- Cross button inside sidebar -->
+                <button id="sidebar-close" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Layer Groups -->
+        <div id="layer-groups" class="p-4">
+            <!-- Boundaries -->
+            <div class="layer-group">
+                <div class="layer-group-header">
+                    <span class="font-medium text-gray-700">🗺️ Boundaries</span>
+                    <svg class="w-4 h-4 transform transition-transform layer-group-arrow" id="boundaries-arrow">▼</svg>
+                </div>
+                <div id="boundaries-layers" class="layer-group-layers collapsed ml-4">
+                    <div class="layer-item" data-layer="lad">LAD Districts (361)</div>
+                    <div class="layer-item" data-layer="lpa">LPA Authorities (379)</div>
+                </div>
+            </div>
+            
+            <!-- AD Plants -->
+            <div class="layer-group">
+                <div class="layer-group-header">
+                    <span class="font-medium text-gray-700">🍃 AD Plants</span>
+                    <svg class="w-4 h-4 transform transition-transform layer-group-arrow" id="ad-plants-arrow">▼</svg>
+                </div>
+                <div id="ad-plants-layers" class="layer-group-layers collapsed ml-4">
+                    <div class="layer-item" data-layer="ad-plants">AD Facilities (2,000+)</div>
+                </div>
+            </div>
+            
+            <!-- Manure Volumes -->
+            <div class="layer-group">
+                <div class="layer-group-header">
+                    <span class="font-medium text-gray-700">🌾 Manure Volumes</span>
+                    <svg class="w-4 h-4 transform transition-transform layer-group-arrow" id="manure-arrow">▼</svg>
+                </div>
+                <div id="manure-layers" class="layer-group-layers collapsed ml-4">
+                    <div class="layer-item" data-layer="beef-fym">Beef FYM</div>
+                    <div class="layer-item" data-layer="beef-slurry">Beef Slurry</div>
+                    <div class="layer-item" data-layer="dairy-fym">Dairy FYM</div>
+                    <div class="layer-item" data-layer="dairy-slurry">Dairy Slurry</div>
+                    <div class="layer-item" data-layer="broilers">Broilers</div>
+                    <div class="layer-item" data-layer="layers">Layers</div>
+                    <div class="layer-item" data-layer="pigs">Pigs</div>
+                    <div class="layer-item" data-layer="sheep">Sheep</div>
+                </div>
+            </div>
+            
+            <!-- Environmental -->
+            <div class="layer-group">
+                <div class="layer-group-header">
+                    <span class="font-medium text-gray-700">🌿 Environmental</span>
+                    <svg class="w-4 h-4 transform transition-transform layer-group-arrow" id="environmental-arrow">▼</svg>
+                </div>
+                <div id="environmental-layers" class="layer-group-layers collapsed ml-4">
+                    <div class="layer-item" data-layer="aonb">AONB</div>
+                    <div class="layer-item" data-layer="sssi">SSSI</div>
+                    <div class="layer-item" data-layer="nvz">NVZ</div>
+                    <div class="layer-item" data-layer="flood">Flood Zones</div>
+                    <div class="layer-item" data-layer="alc">ALC Grades</div>
+                </div>
+            </div>
+            
+            <!-- Infrastructure -->
+            <div class="layer-group">
+                <div class="layer-group-header">
+                    <span class="font-medium text-gray-700">⚡ Infrastructure</span>
+                    <svg class="w-4 h-4 transform transition-transform layer-group-arrow" id="infrastructure-arrow">▼</svg>
+                </div>
+                <div id="infrastructure-layers" class="layer-group-layers collapsed ml-4">
+                    <div class="layer-item" data-layer="dno">DNO Regions</div>
+                    <div class="layer-item" data-layer="water">Water Companies</div>
+                    <div class="layer-item" data-layer="brownfield">Brownfield Sites</div>
+                    <div class="layer-item" data-layer="nts">NTS Pipelines</div>
+                    <div class="layer-item" data-layer="roads">Roads Network</div>
+                </div>
+            </div>
+            
+            <!-- Land Registry -->
+            <div class="layer-group">
+                <div class="layer-group-header">
+                    <span class="font-medium text-gray-700">🏠 Land Registry</span>
+                    <svg class="w-4 h-4 transform transition-transform layer-group-arrow" id="land-registry-arrow">▼</svg>
+                </div>
+                <div id="land-registry-layers" class="layer-group-layers collapsed ml-4">
+                    <div class="layer-item" data-layer="freehold">Freehold Properties</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="p-4 border-t border-gray-200">
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="Search AD plants..." 
+                       class="search-input input-field">
+                <div id="search-results" class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto hidden shadow-soft"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="flex flex-1 h-screen">
+        <!-- Map Container -->
+        <div id="map" class="flex-1 map-container"></div>
+    </div>
+    
+    <!-- Info Panel (Absolutely Positioned) -->
+    <div id="info-panel" class="info-panel">
+        <div class="p-4 border-b border-gray-200 bg-gray-50">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button id="info-collapse" class="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500/50 border border-red-700 hover:border-red-800" title="Collapse Panel">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <h2 class="text-lg font-semibold text-gray-900">Information Panel</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="site-finder-btn" class="px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50" title="Site Finder">
+                        🎯 Site Finder
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="info-content" class="flex-1 p-4 overflow-y-auto">
+            <p class="text-gray-500">Click on the map to view information about features.</p>
+        </div>
+    </div>
+    
+    <!-- Info Panel Reopen Button (shown when collapsed) -->
+    <div id="info-reopen-container" class="fixed top-8 right-8 z-50 hidden">
+        <button id="info-reopen" class="bg-blue-600 text-white p-3 rounded-2xl shadow-xl hover:shadow-2xl border border-blue-700 hover:border-blue-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 hover:scale-105 active:scale-95" title="Reopen Information Panel">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden backdrop-blur-xs">
+        <div class="card shadow-strong animate-scale-in">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+            <p class="mt-4 text-gray-700">Loading map data...</p>
+        </div>
+    </div>
+    
+    <!-- Main JavaScript -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
