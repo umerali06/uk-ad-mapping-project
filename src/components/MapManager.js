@@ -188,31 +188,179 @@ export class MapManager {
     }
     
     /**
-     * Handle map click events
+     * Handle map click events with priority-based feature selection
      */
     handleMapClick(e) {
         const features = this.map.queryRenderedFeatures(e.point);
         
         if (features.length > 0) {
-            // Find the topmost feature
-            const feature = features[0];
-            console.log('Clicked feature:', feature);
+            // Define feature priority (higher priority = more important)
+            const featurePriorities = {
+                'layer-ad-plants': 100,           // AD plants highest priority
+                'land-registry-fill': 90,         // Land registry parcels high priority
+                'layer-lad': 80,                  // LAD boundaries
+                'layer-lpa': 80,                  // LPA boundaries
+                'roads-m': 70,                    // Motorways
+                'roads-a': 65,                    // A-roads
+                'roads-b': 60,                    // B-roads
+                'roads-minor': 55,                // Minor roads
+                'layer-dno': 50,                  // Infrastructure layers
+                'layer-water': 50,
+                'layer-nts': 50,
+                'layer-brownfield': 45,
+                'layer-aonb': 40,                 // Environmental layers
+                'layer-sssi': 40,
+                'layer-nvz': 35,
+                'layer-flood': 35,
+                'layer-alc': 30,
+                'default': 10                     // Default priority
+            };
             
-            // Show feature information in info panel
-            this.showFeatureInfo(feature);
+            // Sort features by priority
+            const sortedFeatures = features.sort((a, b) => {
+                const priorityA = featurePriorities[a.layer?.id] || featurePriorities['default'];
+                const priorityB = featurePriorities[b.layer?.id] || featurePriorities['default'];
+                return priorityB - priorityA;
+            });
+            
+            const feature = sortedFeatures[0];
+            console.log('Clicked feature (priority-selected):', feature);
+            
+            // Add visual feedback for click
+            this.addClickFeedback(e.lngLat);
+            
+            // Show feature information based on type
+            this.showFeatureInfo(feature, e.lngLat);
         } else {
             // Hide info panel if clicking on empty space
             this.hideFeatureInfo();
         }
     }
+
+    /**
+     * Add visual feedback for map clicks
+     */
+    addClickFeedback(lngLat) {
+        // Remove previous click marker
+        if (this.clickMarker) {
+            this.clickMarker.remove();
+        }
+        
+        // Add temporary click marker
+        this.clickMarker = new maplibregl.Marker({
+            color: '#ff4444',
+            scale: 0.8
+        })
+        .setLngLat(lngLat)
+        .addTo(this.map);
+        
+        // Remove click marker after 2 seconds
+        setTimeout(() => {
+            if (this.clickMarker) {
+                this.clickMarker.remove();
+                this.clickMarker = null;
+            }
+        }, 2000);
+    }
     
     /**
      * Show feature information in the info panel
      */
-    showFeatureInfo(feature) {
-        // Dispatch custom event for info panel to handle
-        const event = new CustomEvent('showFeatureInfo', { detail: feature });
+    showFeatureInfo(feature, coordinates) {
+        const layerId = feature.layer?.id;
+        const properties = feature.properties || {};
+        
+        // Enhanced feature information with type detection
+        const featureInfo = {
+            ...feature,
+            clickCoordinates: coordinates,
+            detectedType: this.detectFeatureType(layerId, properties),
+            formattedProperties: this.formatFeatureProperties(properties, layerId)
+        };
+        
+        // Send to appropriate handler based on feature type
+        if (window.APP_STATE?.infoPanel) {
+            const infoPanel = window.APP_STATE.infoPanel;
+            
+            switch (featureInfo.detectedType) {
+                case 'ad-plant':
+                    infoPanel.showADPlantDetails(featureInfo.formattedProperties);
+                    break;
+                case 'land-registry':
+                    infoPanel.showParcelDetails(featureInfo.formattedProperties);
+                    break;
+                case 'lad-boundary':
+                    infoPanel.showLADAnalysis(featureInfo.formattedProperties);
+                    break;
+                case 'lpa-boundary':
+                    infoPanel.showLPAAnalysis(featureInfo.formattedProperties);
+                    break;
+                case 'road':
+                    infoPanel.showRoadDetails(featureInfo.formattedProperties);
+                    break;
+                case 'infrastructure':
+                    infoPanel.showInfrastructureDetails(featureInfo.formattedProperties);
+                    break;
+                case 'environmental':
+                    infoPanel.showEnvironmentalDetails(featureInfo.formattedProperties);
+                    break;
+                default:
+                    infoPanel.showFeatureInfo(featureInfo);
+            }
+        }
+        
+        // Dispatch custom event for other components
+        const event = new CustomEvent('showFeatureInfo', { detail: featureInfo });
         document.dispatchEvent(event);
+    }
+
+    /**
+     * Detect feature type based on layer and properties
+     */
+    detectFeatureType(layerId, properties) {
+        if (layerId?.includes('ad-plants')) return 'ad-plant';
+        if (layerId?.includes('land-registry')) return 'land-registry';
+        if (layerId?.includes('lad')) return 'lad-boundary';
+        if (layerId?.includes('lpa')) return 'lpa-boundary';
+        if (layerId?.includes('roads')) return 'road';
+        if (layerId?.includes('dno') || layerId?.includes('water') || layerId?.includes('nts') || layerId?.includes('brownfield')) return 'infrastructure';
+        if (layerId?.includes('aonb') || layerId?.includes('sssi') || layerId?.includes('nvz') || layerId?.includes('flood') || layerId?.includes('alc')) return 'environmental';
+        
+        return 'generic';
+    }
+
+    /**
+     * Format feature properties for display
+     */
+    formatFeatureProperties(properties, layerId) {
+        const formatted = { ...properties };
+        
+        // Add layer-specific formatting
+        if (layerId?.includes('ad-plants')) {
+            formatted.displayName = properties.name || properties.siteName || 'AD Plant';
+            formatted.category = 'Anaerobic Digestion Facility';
+            formatted.status = properties.status || properties.operationalStatus || 'Unknown';
+            formatted.capacity = properties.capacity ? `${properties.capacity} MW` : 'Not specified';
+            formatted.technology = properties.technology || properties.techType || 'Not specified';
+            formatted.operator = properties.operator || properties.developer || 'Not specified';
+        } else if (layerId?.includes('land-registry')) {
+            formatted.displayName = `Land Parcel ${properties.title_no || ''}`;
+            formatted.category = 'Land Registry Property';
+        } else if (layerId?.includes('roads')) {
+            formatted.displayName = properties.road_name || properties.name || 'Road';
+            formatted.category = `${properties.road_class || 'Unknown'} Road`;
+            formatted.surface = properties.surface || 'Unknown';
+        } else if (layerId?.includes('lad')) {
+            formatted.displayName = properties.LAD23NM || properties.name || 'LAD District';
+            formatted.category = 'Local Authority District';
+            formatted.code = properties.LAD23CD || properties.code;
+        } else if (layerId?.includes('lpa')) {
+            formatted.displayName = properties.LPA23NM || properties.name || 'LPA Authority';
+            formatted.category = 'Local Planning Authority';
+            formatted.code = properties.LPA23CD || properties.code;
+        }
+        
+        return formatted;
     }
     
     /**

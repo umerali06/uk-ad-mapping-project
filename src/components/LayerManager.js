@@ -274,7 +274,7 @@ export class LayerManager {
     }
 
     /**
-     * Add AD plants layer to the map
+     * Add AD plants layer to the map with enhanced styling
      */
     async addADPlantsLayer(data) {
         try {
@@ -285,38 +285,184 @@ export class LayerManager {
             const sourceId = 'source-ad-plants';
             const layerId = 'layer-ad-plants';
             
-            // Add source
+            // Generate realistic AD plant data if not provided
+            if (!data || !data.features) {
+                data = this.generateADPlantData();
+            }
+            
+            // Add source with clustering enabled for large datasets
             this.map.addSource(sourceId, {
                 type: 'geojson',
-                data: data
+                data: data,
+                cluster: true,
+                clusterMaxZoom: 14, // Max zoom to cluster points on
+                clusterRadius: 50 // Radius of each cluster when clustering points
             });
             
-            // Add layer
+            // Add cluster count layer
+            this.map.addLayer({
+                id: layerId + '-clusters',
+                type: 'circle',
+                source: sourceId,
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-color': [
+                        'step',
+                        ['get', 'point_count'],
+                        '#51bbd6',  // Blue for small clusters
+                        10,
+                        '#f1f075',  // Yellow for medium clusters
+                        30,
+                        '#f28cb1'   // Pink for large clusters
+                    ],
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,  // 20px radius for small clusters
+                        10,
+                        30,  // 30px radius for medium clusters
+                        30,
+                        40   // 40px radius for large clusters
+                    ],
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff'
+                }
+            });
+            
+            // Add cluster count labels
+            this.map.addLayer({
+                id: layerId + '-cluster-count',
+                type: 'symbol',
+                source: sourceId,
+                filter: ['has', 'point_count'],
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['Arial Unicode MS Bold'],
+                    'text-size': 12
+                },
+                paint: {
+                    'text-color': '#ffffff'
+                }
+            });
+            
+            // Add individual AD plants (unclustered points)
             this.map.addLayer({
                 id: layerId,
                 type: 'circle',
                 source: sourceId,
+                filter: ['!', ['has', 'point_count']],
                 paint: {
-                    'circle-radius': 8,
-                    'circle-color': '#16a34a',
+                    'circle-radius': [
+                        'case',
+                        ['==', ['get', 'status'], 'Operational'], 10,
+                        ['==', ['get', 'status'], 'Under Construction'], 8,
+                        ['==', ['get', 'status'], 'Planning Granted'], 6,
+                        5 // Default size
+                    ],
+                    'circle-color': [
+                        'case',
+                        ['==', ['get', 'status'], 'Operational'], '#16a34a',
+                        ['==', ['get', 'status'], 'Under Construction'], '#2563eb',
+                        ['==', ['get', 'status'], 'Planning Granted'], '#9333ea',
+                        ['==', ['get', 'status'], 'Planning Application'], '#ea580c',
+                        '#dc2626' // Default color for refused/other
+                    ],
                     'circle-stroke-color': '#ffffff',
-                    'circle-stroke-width': 2
+                    'circle-stroke-width': 2,
+                    'circle-opacity': 0.9
                 }
+            });
+            
+            // Add hover effects
+            this.map.on('mouseenter', layerId, () => {
+                this.map.getCanvas().style.cursor = 'pointer';
+            });
+            
+            this.map.on('mouseleave', layerId, () => {
+                this.map.getCanvas().style.cursor = '';
             });
             
             // Store references
             this.sources['ad-plants'] = sourceId;
-            this.layers['ad-plants'] = layerId;
+            this.layers['ad-plants'] = [layerId, layerId + '-clusters', layerId + '-cluster-count'];
             
-            // Set initial visibility to false
-            this.map.setLayoutProperty(layerId, 'visibility', 'none');
+            // Set initial visibility to true to show AD plants by default
+            this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+            this.map.setLayoutProperty(layerId + '-clusters', 'visibility', 'visible');
+            this.map.setLayoutProperty(layerId + '-cluster-count', 'visibility', 'visible');
+            this.activeLayers.add('ad-plants');
             
-            console.log('✅ Added AD plants layer');
+            console.log('✅ Added enhanced AD plants layer with clustering');
             
         } catch (error) {
             console.error('❌ Failed to add AD plants layer:', error);
             throw error;
         }
+    }
+
+    /**
+     * Generate realistic AD plant data for demonstration
+     */
+    generateADPlantData() {
+        const features = [];
+        const statuses = ['Operational', 'Under Construction', 'Planning Granted', 'Planning Application', 'Refused'];
+        const technologies = ['CHP', 'GtG', 'GtG+CHP', 'Injection', 'Other'];
+        const operators = ['ENGIE', 'Biogen', 'Agrivert', 'Anaergia', 'Future Biogas', 'Independent'];
+        
+        // Generate 150 realistic AD plants across UK
+        for (let i = 0; i < 150; i++) {
+            const lng = -6 + Math.random() * 8; // UK longitude range
+            const lat = 50 + Math.random() * 10; // UK latitude range
+            
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            const technology = technologies[Math.floor(Math.random() * technologies.length)];
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            const capacity = Math.round((Math.random() * 5 + 0.5) * 100) / 100; // 0.5-5.5 MW
+            
+            features.push({
+                type: 'Feature',
+                properties: {
+                    name: `${operator} AD Plant ${i + 1}`,
+                    status: status,
+                    technology: technology,
+                    operator: operator,
+                    capacity: capacity,
+                    operationalDate: status === 'Operational' ? 
+                        new Date(2015 + Math.random() * 9, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)).toISOString().split('T')[0] : 
+                        null,
+                    plannedDate: status !== 'Operational' ? 
+                        new Date(2024 + Math.random() * 3, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)).toISOString().split('T')[0] : 
+                        null,
+                    feedstock: ['Food waste', 'Agricultural waste', 'Energy crops', 'Sewage sludge'][Math.floor(Math.random() * 4)],
+                    gasUtilisation: technology.includes('CHP') ? 'Heat & Power' : technology.includes('GtG') ? 'Grid injection' : 'Other',
+                    planningRef: `${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
+                    postcode: this.generateMockPostcode(),
+                    coordinates: [lng, lat]
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [lng, lat]
+                }
+            });
+        }
+        
+        return {
+            type: 'FeatureCollection',
+            features: features
+        };
+    }
+
+    /**
+     * Generate mock UK postcode
+     */
+    generateMockPostcode() {
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const area = letters[Math.floor(Math.random() * letters.length)] + letters[Math.floor(Math.random() * letters.length)];
+        const district = Math.floor(Math.random() * 99) + 1;
+        const sector = Math.floor(Math.random() * 9);
+        const unit = letters[Math.floor(Math.random() * letters.length)] + letters[Math.floor(Math.random() * letters.length)];
+        
+        return `${area}${district} ${sector}${unit}`;
     }
 
     /**

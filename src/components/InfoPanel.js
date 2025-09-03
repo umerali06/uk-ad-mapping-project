@@ -285,6 +285,214 @@ export class InfoPanel {
     }
 
     /**
+     * Show AD Plant details
+     */
+    showADPlantDetails(properties) {
+        if (!this.content) return;
+        
+        this.content.innerHTML = `
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    ⚡ ${properties.displayName || properties.name || 'AD Plant'}
+                </h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Status</label>
+                            <p class="text-gray-900 flex items-center">
+                                <span class="inline-block w-3 h-3 rounded-full mr-2" style="background-color: ${
+                                    properties.status === 'Operational' ? '#16a34a' :
+                                    properties.status === 'Under Construction' ? '#2563eb' :
+                                    properties.status === 'Planning Granted' ? '#9333ea' :
+                                    properties.status === 'Planning Application' ? '#ea580c' : '#dc2626'
+                                }"></span>
+                                ${properties.status || 'Unknown'}
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Capacity</label>
+                            <p class="text-gray-900">${properties.capacity || 'Not specified'} MW</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Technology</label>
+                            <p class="text-gray-900">${properties.technology || 'Not specified'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Operator</label>
+                            <p class="text-gray-900">${properties.operator || 'Not specified'}</p>
+                        </div>
+                        
+                        ${properties.feedstock ? `
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Feedstock</label>
+                            <p class="text-gray-900">${properties.feedstock}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${properties.operationalDate ? `
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Operational Since</label>
+                            <p class="text-gray-900">${properties.operationalDate}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${properties.plannedDate ? `
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                            <label class="text-sm font-medium text-yellow-800">Planned Date</label>
+                            <p class="text-yellow-900">${properties.plannedDate}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${properties.postcode ? `
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Location</label>
+                            <p class="text-gray-900">${properties.postcode}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-gray-200">
+                        <button onclick="window.APP_STATE.siteFinder?.analyzeNearbyResources('${properties.name}')"
+                                class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            🌾 Analyze Nearby Resources
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.show();
+    }
+
+    /**
+     * Show Road details
+     */
+    showRoadDetails(properties) {
+        if (!this.content) return;
+        
+        this.content.innerHTML = `
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    🛣️ ${properties.displayName || properties.road_name || 'Road'}
+                </h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Road Class</label>
+                            <p class="text-gray-900">${properties.road_class || 'Unknown'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Surface</label>
+                            <p class="text-gray-900">${properties.surface || 'Unknown'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Access</label>
+                            <p class="text-gray-900">${properties.access || 'Public'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-gray-200">
+                        <p class="text-sm text-gray-600">
+                            💡 This road classification affects AD plant accessibility for feedstock delivery and maintenance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.show();
+    }
+
+    /**
+     * Show Infrastructure details
+     */
+    showInfrastructureDetails(properties) {
+        if (!this.content) return;
+        
+        this.content.innerHTML = `
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    ⚡ ${properties.displayName || properties.name || 'Infrastructure'}
+                </h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Type</label>
+                            <p class="text-gray-900">${properties.category || 'Infrastructure'}</p>
+                        </div>
+                        
+                        ${Object.entries(properties).filter(([key, value]) => 
+                            key !== 'displayName' && key !== 'name' && key !== 'category' && 
+                            value && typeof value === 'string'
+                        ).map(([key, value]) => `
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <label class="text-sm font-medium text-gray-700">${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</label>
+                                <p class="text-gray-900">${value}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-gray-200">
+                        <p class="text-sm text-gray-600">
+                            💡 Infrastructure proximity is crucial for AD plant viability and connection costs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.show();
+    }
+
+    /**
+     * Show Environmental details
+     */
+    showEnvironmentalDetails(properties) {
+        if (!this.content) return;
+        
+        this.content.innerHTML = `
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    🌿 ${properties.displayName || properties.name || 'Environmental Area'}
+                </h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                            <label class="text-sm font-medium text-green-800">Protection Status</label>
+                            <p class="text-green-900">${properties.category || 'Protected Area'}</p>
+                        </div>
+                        
+                        ${Object.entries(properties).filter(([key, value]) => 
+                            key !== 'displayName' && key !== 'name' && key !== 'category' && 
+                            value && typeof value === 'string'
+                        ).map(([key, value]) => `
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <label class="text-sm font-medium text-gray-700">${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</label>
+                                <p class="text-gray-900">${value}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-gray-200">
+                        <div class="bg-red-50 p-3 rounded-lg border border-red-200">
+                            <p class="text-sm text-red-800">
+                                ⚠️ <strong>Planning Constraint:</strong> This environmental designation may restrict or prohibit AD plant development.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.show();
+    }
+
+    /**
      * Display LAD analysis information
      */
     showLADAnalysis(ladData) {
@@ -292,8 +500,13 @@ export class InfoPanel {
         
         this.content.innerHTML = `
             <div class="p-4">
-                <h3 class="text-lg font-semibold mb-3">LAD Analysis: ${ladData.name}</h3>
+                <h3 class="text-lg font-semibold mb-3">🗺️ LAD Analysis: ${ladData.displayName || ladData.name || 'District'}</h3>
                 <div class="space-y-3">
+                    <div class="bg-gray-50 p-3 rounded">
+                        <h4 class="font-medium mb-2">District Information</h4>
+                        <p><strong>Code:</strong> ${ladData.code || 'N/A'}</p>
+                        <p><strong>Area:</strong> ${ladData.area || 'N/A'}</p>
+                    </div>
                     <div class="bg-gray-50 p-3 rounded">
                         <h4 class="font-medium mb-2">AD Plant Summary</h4>
                         <p><strong>Total Plants:</strong> ${ladData.totalPlants || 0}</p>
@@ -304,6 +517,39 @@ export class InfoPanel {
                         <h4 class="font-medium mb-2">Capacity Analysis</h4>
                         <p><strong>Total Capacity:</strong> ${ladData.totalCapacity || 'N/A'}</p>
                         <p><strong>Average Plant Size:</strong> ${ladData.averageSize || 'N/A'}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.show();
+    }
+
+    /**
+     * Display LPA analysis information
+     */
+    showLPAAnalysis(lpaData) {
+        if (!this.content) return;
+        
+        this.content.innerHTML = `
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-3">🏛️ LPA Analysis: ${lpaData.displayName || lpaData.name || 'Authority'}</h3>
+                <div class="space-y-3">
+                    <div class="bg-gray-50 p-3 rounded">
+                        <h4 class="font-medium mb-2">Authority Information</h4>
+                        <p><strong>Code:</strong> ${lpaData.code || 'N/A'}</p>
+                        <p><strong>Type:</strong> Local Planning Authority</p>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <h4 class="font-medium mb-2">Planning Summary</h4>
+                        <p><strong>Applications:</strong> ${lpaData.applications || 'N/A'}</p>
+                        <p><strong>Approvals:</strong> ${lpaData.approvals || 'N/A'}</p>
+                        <p><strong>Success Rate:</strong> ${lpaData.successRate || 'N/A'}</p>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded">
+                        <h4 class="font-medium mb-2">Policy Framework</h4>
+                        <p><strong>Renewable Energy Policy:</strong> ${lpaData.renewablePolicy || 'Standard'}</p>
+                        <p><strong>AD Support Level:</strong> ${lpaData.adSupport || 'Moderate'}</p>
                     </div>
                 </div>
             </div>
