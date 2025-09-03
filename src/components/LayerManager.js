@@ -44,11 +44,28 @@ export class LayerManager {
             // Load initial layers
             await this.loadInitialLayers();
             
+            // Initialize Land Registry Manager
+            await this.initializeLandRegistryManager();
+            
             console.log('✅ Layer Manager initialized successfully');
             
         } catch (error) {
             console.error('❌ Failed to initialize Layer Manager:', error);
             throw error;
+        }
+    }
+
+    /**
+     * Initialize Land Registry Manager
+     */
+    async initializeLandRegistryManager() {
+        try {
+            if (window.APP_STATE && window.APP_STATE.landRegistryManager) {
+                await window.APP_STATE.landRegistryManager.initialize(this.map);
+                console.log('✅ Land Registry Manager integrated with LayerManager');
+            }
+        } catch (error) {
+            console.error('❌ Failed to initialize Land Registry Manager:', error);
         }
     }
 
@@ -329,10 +346,12 @@ export class LayerManager {
             await this.addPlaceholderLayer('water', 'infrastructure', '#00bfff');
             await this.addPlaceholderLayer('brownfield', 'infrastructure', '#8b4513');
             await this.addPlaceholderLayer('nts', 'infrastructure', '#ff6347');
-            await this.addPlaceholderLayer('roads', 'infrastructure', '#696969');
             
-            // Add placeholder layers for land registry
-            await this.addPlaceholderLayer('freehold', 'landRegistry', '#9932cc');
+            // Add roads layer with proper styling by class
+            await this.addRoadNetworkLayer();
+            
+            // Note: Land Registry layer is now handled by LandRegistryManager
+            // with proper vector tile support and lazy loading
             
             console.log('✅ Placeholder layers loaded');
             
@@ -398,10 +417,184 @@ export class LayerManager {
     }
 
     /**
+     * Add road network layer with styling by class (M/A/B roads)
+     */
+    async addRoadNetworkLayer() {
+        try {
+            console.log('🛣️ Adding road network layer...');
+            
+            // Generate mock road data for demonstration
+            // In production, this would load from your GCS MBTiles/PMTiles
+            const roadData = this.generateMockRoadData();
+            
+            const sourceId = 'roads-source';
+            
+            // Add source
+            this.map.addSource(sourceId, {
+                type: 'geojson',
+                data: roadData,
+                lineMetrics: true
+            });
+            
+            // Add M-roads (Motorways) - thickest, red
+            this.map.addLayer({
+                id: 'roads-m',
+                type: 'line',
+                source: sourceId,
+                filter: ['==', ['get', 'road_class'], 'M'],
+                paint: {
+                    'line-color': '#e74c3c',
+                    'line-width': 4,
+                    'line-opacity': 0.8
+                },
+                layout: {
+                    'visibility': 'none'
+                }
+            });
+            
+            // Add A-roads (A-class) - medium, orange
+            this.map.addLayer({
+                id: 'roads-a',
+                type: 'line',
+                source: sourceId,
+                filter: ['==', ['get', 'road_class'], 'A'],
+                paint: {
+                    'line-color': '#f39c12',
+                    'line-width': 3,
+                    'line-opacity': 0.8
+                },
+                layout: {
+                    'visibility': 'none'
+                }
+            });
+            
+            // Add B-roads (B-class) - thin, yellow
+            this.map.addLayer({
+                id: 'roads-b',
+                type: 'line',
+                source: sourceId,
+                filter: ['==', ['get', 'road_class'], 'B'],
+                paint: {
+                    'line-color': '#f1c40f',
+                    'line-width': 2,
+                    'line-opacity': 0.7
+                },
+                layout: {
+                    'visibility': 'none'
+                }
+            });
+            
+            // Add minor roads - thinnest, gray
+            this.map.addLayer({
+                id: 'roads-minor',
+                type: 'line',
+                source: sourceId,
+                filter: ['==', ['get', 'road_class'], 'Minor'],
+                paint: {
+                    'line-color': '#95a5a6',
+                    'line-width': 1,
+                    'line-opacity': 0.6
+                },
+                layout: {
+                    'visibility': 'none'
+                }
+            });
+            
+            // Store references for the combined roads layer
+            this.sources['roads'] = sourceId;
+            this.layers['roads'] = ['roads-m', 'roads-a', 'roads-b', 'roads-minor'];
+            
+            console.log('✅ Road network layer added with class-based styling');
+            
+        } catch (error) {
+            console.error('❌ Failed to add road network layer:', error);
+        }
+    }
+    
+    /**
+     * Generate mock road data for demonstration
+     */
+    generateMockRoadData() {
+        const features = [];
+        const roadClasses = ['M', 'A', 'B', 'Minor'];
+        const roadNames = {
+            'M': ['M1', 'M25', 'M4', 'M6', 'M40'],
+            'A': ['A1', 'A40', 'A34', 'A413', 'A4010'],
+            'B': ['B480', 'B481', 'B4009', 'B4011'],
+            'Minor': ['Station Road', 'High Street', 'Church Lane', 'Mill Road']
+        };
+        
+        // Generate roads across UK
+        for (let i = 0; i < 100; i++) {
+            const roadClass = roadClasses[Math.floor(Math.random() * roadClasses.length)];
+            const roadName = roadNames[roadClass][Math.floor(Math.random() * roadNames[roadClass].length)];
+            
+            // Generate random road segment
+            const startLng = -6 + Math.random() * 8; // Roughly UK bounds
+            const startLat = 50 + Math.random() * 10;
+            const endLng = startLng + (Math.random() - 0.5) * 0.1;
+            const endLat = startLat + (Math.random() - 0.5) * 0.1;
+            
+            features.push({
+                type: 'Feature',
+                properties: {
+                    road_class: roadClass,
+                    road_name: roadName,
+                    surface: Math.random() > 0.1 ? 'paved' : 'unpaved',
+                    access: 'public'
+                },
+                geometry: {
+                    type: 'LineString',
+                    coordinates: [
+                        [startLng, startLat],
+                        [endLng, endLat]
+                    ]
+                }
+            });
+        }
+        
+        return {
+            type: 'FeatureCollection',
+            features: features
+        };
+    }
+
+    /**
      * Toggle layer visibility
      */
     toggleLayer(layerId) {
         try {
+            if (layerId === 'roads') {
+                // Special handling for roads layer (multiple sub-layers)
+                const roadLayers = this.layers[layerId];
+                if (Array.isArray(roadLayers)) {
+                    const firstLayerVisibility = this.map.getLayoutProperty(roadLayers[0], 'visibility');
+                    const newVisibility = firstLayerVisibility === 'visible' ? 'none' : 'visible';
+                    
+                    roadLayers.forEach(layerId => {
+                        if (this.map.getLayer(layerId)) {
+                            this.map.setLayoutProperty(layerId, 'visibility', newVisibility);
+                        }
+                    });
+                    
+                    if (newVisibility === 'visible') {
+                        this.activeLayers.add(layerId);
+                    } else {
+                        this.activeLayers.delete(layerId);
+                    }
+                    
+                    console.log(`✅ Roads layer ${newVisibility === 'visible' ? 'enabled' : 'disabled'}`);
+                    return;
+                }
+            } else if (layerId === 'freehold') {
+                // Special handling for Land Registry layer
+                if (window.APP_STATE && window.APP_STATE.landRegistryManager) {
+                    window.APP_STATE.landRegistryManager.toggleLayer();
+                    return;
+                }
+            }
+            
+            // Standard layer handling
             if (!this.layers[layerId]) {
                 console.warn(`⚠️ Layer ${layerId} not found`);
                 return;

@@ -1,0 +1,360 @@
+2025-08-24T23:28:32.911Z [info] Warning: NODE_ENV was incorrectly set to "development", this value is being overridden to "production"
+2025-08-24T23:28:33.005Z [info] 🚨 COMPLETE MongoDB Reset...
+2025-08-24T23:28:33.194Z [info] ✅ Fresh MongoDB loaded
+2025-08-24T23:28:33.195Z [info] ✅ Globals set
+2025-08-24T23:28:33.372Z [info] 🔐 Auth middleware called for: POST /api/analyze
+2025-08-24T23:28:33.372Z [info] 🔐 Auth header: Present
+2025-08-24T23:28:33.372Z [info] 🔐 Token extracted: Yes
+2025-08-24T23:28:33.372Z [info] 🔐 Verifying token...
+2025-08-24T23:28:33.374Z [info] 🔐 Token verification result: Success
+2025-08-24T23:28:33.374Z [info] 🔐 Looking for session with token...
+2025-08-24T23:28:33.375Z [info] 🔐 Token length: 244
+2025-08-24T23:28:33.375Z [info] 🔐 Token preview: eyJhbGciOiJIUzI1NiIs...
+2025-08-24T23:28:33.375Z [info] 🔌 Connecting to MongoDB Atlas... (Attempt 1/3)
+2025-08-24T23:28:35.791Z [info] ✅ Connected to MongoDB Atlas: sibi_analyzer
+2025-08-24T23:28:35.791Z [info] 🔍 Searching for session with access token: {
+  tokenLength: 244,
+  tokenPreview: 'eyJhbGciOiJIUzI1NiIs...',
+  collectionName: 'user_sessions'
+}
+2025-08-24T23:28:35.791Z [info] 🔍 Query: {
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGFiYTAwZjU5YmNhMWRhYTI1YjY4YjIiLCJlbWFpbCI6ImFkbWluQGVhc3RlYy5jb20uYXUiLCJ1c2VybmFtZSI6ImJlcnQzODYiLCJpYXQiOjE3NTYwNzgwOTUsImV4cCI6MTc1NjA4MTY5NX0.qv1b5xChi7C6WLcDPH-xk6PGHfDk7qFA53edxJFmIIY",
+  "isActive": true,
+  "expiresAt": {
+    "$gt": "2025-08-24T23:28:35.791Z"
+  }
+}
+2025-08-24T23:28:35.997Z [info] 🔍 Session search result: Found
+2025-08-24T23:28:35.998Z [info] 🔍 Found session: {
+  sessionId: 'session_1756078095911_wtmjdb1tb',
+  userId: new ObjectId('68aba00f59bca1daa25b68b2'),
+  isActive: true,
+  expiresAt: 2025-08-31T23:28:15.911Z
+}
+2025-08-24T23:28:35.998Z [info] 🔐 Session found: Yes
+2025-08-24T23:28:35.998Z [info] 🔐 Session details: {
+  sessionId: 'session_1756078095911_wtmjdb1tb',
+  userId: '68aba00f59bca1daa25b68b2',
+  isActive: true,
+  expiresAt: 2025-08-31T23:28:15.911Z
+}
+2025-08-24T23:28:36.206Z [info] ✅ Session validated and activity updated
+2025-08-24T23:28:36.207Z [info] ✅ Auth middleware successful, calling handler
+2025-08-24T23:28:36.207Z [info] 🔐 User from token: {
+  userId: '68aba00f59bca1daa25b68b2',
+  email: 'admin@eastec.com.au',
+  username: 'bert386',
+  iat: 1756078095,
+  exp: 1756081695
+}
+2025-08-24T23:28:36.207Z [info] 🔐 Session from DB: {
+  _id: new ObjectId('68aba00f59bca1daa25b68b3'),
+  userId: new ObjectId('68aba00f59bca1daa25b68b2'),
+  sessionId: 'session_1756078095911_wtmjdb1tb',
+  accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGFiYTAwZjU5YmNhMWRhYTI1YjY4YjIiLCJlbWFpbCI6ImFkbWluQGVhc3RlYy5jb20uYXUiLCJ1c2VybmFtZSI6ImJlcnQzODYiLCJpYXQiOjE3NTYwNzgwOTUsImV4cCI6MTc1NjA4MTY5NX0.qv1b5xChi7C6WLcDPH-xk6PGHfDk7qFA53edxJFmIIY',
+  refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGFiYTAwZjU5YmNhMWRhYTI1YjY4YjIiLCJlbWFpbCI6ImFkbWluQGVhc3RlYy5jb20uYXUiLCJ1c2VybmFtZSI6ImJlcnQzODYiLCJpYXQiOjE3NTYwNzgwOTUsImV4cCI6MTc1NjY4Mjg5NX0.-XuX_ucJd0xaw2X9PkT8wyfLuOVIE1v7naQo8erc1a4',
+  isActive: true,
+  expiresAt: 2025-08-31T23:28:15.911Z,
+  createdAt: 2025-08-24T23:28:15.911Z,
+  updatedAt: 2025-08-24T23:28:25.737Z
+}
+2025-08-24T23:28:36.225Z [info] 🚀 Starting enhanced analysis for 1 images...
+2025-08-24T23:28:36.225Z [info] ⚙️ Analysis options: default
+2025-08-24T23:28:36.225Z [info] 📸 Processing image 1/1: 532555023_1305696897827483_282052312335525310_n.jpg
+2025-08-24T23:28:36.226Z [info] 🔍 Image 1 object: {
+  name: '532555023_1305696897827483_282052312335525310_n.jpg',
+  hasBase64Data: true,
+  hasData: false,
+  hasUrl: true,
+  dataType: 'undefined',
+  base64DataType: 'string'
+}
+2025-08-24T23:28:36.226Z [info] 📊 Using image data type: string, length: 208455
+2025-08-24T23:28:36.227Z [info] 🔍 Starting enhanced AI Vision analysis for image 1: 532555023_1305696897827483_282052312335525310_n.jpg
+2025-08-24T23:28:36.229Z [info] Starting AI Vision analysis for base64 image data...
+2025-08-24T23:28:36.455Z [error] AI Vision analysis failed: AuthenticationError: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************gWoA. You can find your API key at https://platform.openai.com/account/api-keys.
+    at APIError.generate (/var/task/.next/server/app/api/analyze/route.js:225:20)
+    at client_OpenAI.makeStatusError (/var/task/.next/server/app/api/analyze/route.js:7467:25)
+    at client_OpenAI.makeRequest (/var/task/.next/server/app/api/analyze/route.js:7617:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AIVisionService.analyzeImage (/var/task/.next/server/app/api/analyze/route.js:8220:30)
+    at async processImageWithAI (/var/task/.next/server/app/api/analyze/route.js:10038:26)
+    at async /var/task/.next/server/app/api/analyze/route.js:10628:43
+    at async handler (/var/task/.next/server/app/api/analyze/route.js:10839:40)
+    at async /var/task/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41960 {
+  status: 401,
+  headers: Headers {
+    date: 'Sun, 24 Aug 2025 23:28:36 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '414',
+    connection: 'keep-alive',
+    vary: 'Origin',
+    'x-request-id': 'req_5f5a97d9224546aaba131df98de210c9',
+    'x-envoy-upstream-service-time': '4',
+    'cf-cache-status': 'DYNAMIC',
+    'set-cookie': '__cf_bm=.fbY6sBnxv831_0RWYOM.38ku9qvHtxMcx5i1akl2G0-1756078116-1.0.1.1-E5x_D7kzg6e.t5o2ypL99eXpmPsSG2STE0pPQ8DLiO3UW8OCiqBf_5AbW6bGmP6qCajOi5w1bmBGfRoSsWo9gTqhx3xbJnoatmrbLpITEvA; path=/; expires=Sun, 24-Aug-25 23:58:36 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=4eOxJOrSBlBMmKw7zHrCgN7b3uxh_3PRfWtaUXsKuSA-1756078116440-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    'x-content-type-options': 'nosniff',
+    server: 'cloudflare',
+    'cf-ray': '9746a082bbc538a0-IAD',
+    'alt-svc': 'h3=":443"; ma=86400'
+  },
+  requestID: 'req_5f5a97d9224546aaba131df98de210c9',
+  error: {
+    message: 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************gWoA. You can find your API key at https://platform.openai.com/account/api-keys.',
+    type: 'invalid_request_error',
+    param: null,
+    code: 'invalid_api_key'
+  },
+  code: 'invalid_api_key',
+  param: null,
+  type: 'invalid_request_error'
+}
+2025-08-24T23:28:36.455Z [info] 🔄 Activating enhanced fallback system...
+2025-08-24T23:28:36.455Z [info] 🤖 Attempting alternative AI models...
+2025-08-24T23:28:36.455Z [info] 🤖 Attempting alternative AI model analysis...
+2025-08-24T23:28:36.455Z [info] 🔄 Trying model: gpt-4
+2025-08-24T23:28:36.605Z [info] ❌ Model gpt-4 failed: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************gWoA. You can find your API key at https://platform.openai.com/account/api-keys.
+2025-08-24T23:28:36.605Z [info] 🔄 Trying model: gpt-3.5-turbo
+2025-08-24T23:28:36.784Z [info] ❌ Model gpt-3.5-turbo failed: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************gWoA. You can find your API key at https://platform.openai.com/account/api-keys.
+2025-08-24T23:28:36.785Z [error] Alternative AI models failed: Error: All alternative models failed
+    at AIVisionService.tryAlternativeAIModels (/var/task/.next/server/app/api/analyze/route.js:8376:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AIVisionService.generateIntelligentFallback (/var/task/.next/server/app/api/analyze/route.js:8325:39)
+    at async AIVisionService.analyzeImage (/var/task/.next/server/app/api/analyze/route.js:8314:20)
+    at async processImageWithAI (/var/task/.next/server/app/api/analyze/route.js:10038:26)
+    at async /var/task/.next/server/app/api/analyze/route.js:10628:43
+    at async handler (/var/task/.next/server/app/api/analyze/route.js:10839:40)
+    at async /var/task/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41960
+2025-08-24T23:28:36.785Z [info] Alternative AI models failed, trying next method...
+2025-08-24T23:28:36.785Z [info] 🔍 Attempting basic image analysis...
+2025-08-24T23:28:36.785Z [info] 🔍 Attempting basic image analysis techniques...
+2025-08-24T23:28:36.786Z [info] ✅ Basic image analysis successful: 4 items
+2025-08-24T23:28:36.786Z [info] ✅ AI Vision successfully identified 4 items
+2025-08-24T23:28:36.786Z [info] ✅ AI Vision analysis completed for image 1!
+2025-08-24T23:28:36.786Z [info] 🎯 AI Vision returned 4 items for image 1
+2025-08-24T23:28:36.786Z [info] 📋 First item structure: {
+  "id": "text_based_1756078116785_0",
+  "name": "Text-Based Collectible - Reading Required",
+  "category": "Collectibles",
+  "condition": "unknown",
+  "estimatedValue": {
+    "min": 15,
+    "max": 150,
+    "mean": 75,
+    "currency": "USD"
+  },
+  "confidence": 0.5,
+  "aiEstimate": {
+    "reasoning": "Text detected in image - manual reading required",
+    "factors": [
+      "Text content detected",
+      "Manual reading needed",
+      "Content-based valuation"
+    ],
+    "value": 75,
+    "confidence": 0.5
+  }
+}
+2025-08-24T23:28:36.786Z [info] 🔄 Processing item: Text-Based Collectible - Reading Required (Collectibles)
+2025-08-24T23:28:36.786Z [info] 🛒 Getting enhanced eBay data for: Text-Based Collectible - Reading Required
+2025-08-24T23:28:36.787Z [info] 🔍 Using optimized search term: "Text-Based Collectible - Reading Required" for item: Text-Based Collectible - Reading Required
+2025-08-24T23:28:36.787Z [info] 🛒 Getting enhanced eBay data for: Text-Based Collectible - Reading Required
+2025-08-24T23:28:36.787Z [info] 🔍 Using optimized search term: "Text-Based Collectible - Reading Required" for item: Text-Based Collectible - Reading Required
+2025-08-24T23:28:36.787Z [info] 🚀 Starting comprehensive eBay data collection...
+2025-08-24T23:28:36.787Z [info] 📊 Progress: 0% - Initializing data sources...
+2025-08-24T23:28:36.787Z [info] 🔄 [1/8] Trying data source: eBay Direct with REAL DATA priority
+2025-08-24T23:28:36.787Z [info] 📊 Progress: 6% - eBay Direct
+2025-08-24T23:28:36.788Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required
+2025-08-24T23:28:36.788Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:28:36.789Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:28:38.245Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:38.245Z [info] ⏳ Waiting 4022ms before retry...
+2025-08-24T23:28:42.268Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required
+2025-08-24T23:28:42.268Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:28:42.268Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:28:42.282Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:42.282Z [info] ⏳ Waiting 6897ms before retry...
+2025-08-24T23:28:46.789Z [info] ❌ eBay data retrieval failed: Error: eBay primary search timeout
+    at Timeout._onTimeout (/var/task/.next/server/app/api/analyze/route.js:10328:60)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+2025-08-24T23:28:46.789Z [info] 🔄 Using final fallback: category-based market data
+2025-08-24T23:28:46.789Z [info] ✅ Generated fallback market data
+2025-08-24T23:28:46.790Z [info] 📈 eBay data for "Text-Based Collectible - Reading Required": { activeListings: 22, soldItems: 8, trend: 'stable' }
+2025-08-24T23:28:46.790Z [info] 🔄 Processing item: Document or Certificate - Content Analysis Needed (Collectibles)
+2025-08-24T23:28:46.790Z [info] 🛒 Getting enhanced eBay data for: Document or Certificate - Content Analysis Needed
+2025-08-24T23:28:46.790Z [info] 🔍 Using optimized search term: "Document or Certificate - Content Analysis Needed" for item: Document or Certificate - Content Analysis Needed
+2025-08-24T23:28:46.790Z [info] 🛒 Getting enhanced eBay data for: Document or Certificate - Content Analysis Needed
+2025-08-24T23:28:46.790Z [info] 🔍 Using optimized search term: "Document or Certificate - Content Analysis Needed" for item: Document or Certificate - Content Analysis Needed
+2025-08-24T23:28:46.790Z [info] 🚀 Starting comprehensive eBay data collection...
+2025-08-24T23:28:46.790Z [info] 📊 Progress: 0% - Initializing data sources...
+2025-08-24T23:28:46.790Z [info] 🔄 [1/8] Trying data source: eBay Direct with REAL DATA priority
+2025-08-24T23:28:46.790Z [info] 📊 Progress: 6% - eBay Direct
+2025-08-24T23:28:46.790Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Document%20or%20Certificate%20-%20Content%20Analysis%20Needed
+2025-08-24T23:28:46.790Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:28:46.790Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:28:49.180Z [info] 🔄 Scraping attempt 3/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required
+2025-08-24T23:28:49.180Z [info] ⏱️ Timeout: 25000ms, Attempt: 3/3
+2025-08-24T23:28:49.180Z [info] 🌐 Scraping with enhanced anti-detection (attempt 3)
+2025-08-24T23:28:49.205Z [warning] Scraping attempt 3 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:49.205Z [error] ❌ All scraping attempts failed for https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required
+2025-08-24T23:28:49.205Z [info] 🔄 [2/8] Trying data source: eBay Sold with REAL DATA priority
+2025-08-24T23:28:49.205Z [info] 📊 Progress: 13% - eBay Sold
+2025-08-24T23:28:49.205Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required&LH_Sold=1&LH_Complete=1
+2025-08-24T23:28:49.205Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:28:49.205Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:28:49.261Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:49.261Z [info] ⏳ Waiting 3415ms before retry...
+2025-08-24T23:28:52.677Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required&LH_Sold=1&LH_Complete=1
+2025-08-24T23:28:52.677Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:28:52.677Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:28:52.693Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:52.693Z [info] ⏳ Waiting 7643ms before retry...
+2025-08-24T23:28:54.447Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:54.447Z [info] ⏳ Waiting 3690ms before retry...
+2025-08-24T23:28:56.791Z [info] ❌ eBay data retrieval failed: Error: eBay primary search timeout
+    at Timeout._onTimeout (/var/task/.next/server/app/api/analyze/route.js:10328:60)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+2025-08-24T23:28:56.791Z [info] 🔄 Using final fallback: category-based market data
+2025-08-24T23:28:56.791Z [info] ✅ Generated fallback market data
+2025-08-24T23:28:56.792Z [info] 📈 eBay data for "Document or Certificate - Content Analysis Needed": { activeListings: 11, soldItems: 8, trend: 'declining' }
+2025-08-24T23:28:56.792Z [info] 🔄 Processing item: Labeled Item - Text Identification Required (Collectibles)
+2025-08-24T23:28:56.792Z [info] 🛒 Getting enhanced eBay data for: Labeled Item - Text Identification Required
+2025-08-24T23:28:56.792Z [info] 🔍 Using optimized search term: "Labeled Item - Text Identification Required" for item: Labeled Item - Text Identification Required
+2025-08-24T23:28:56.792Z [info] 🛒 Getting enhanced eBay data for: Labeled Item - Text Identification Required
+2025-08-24T23:28:56.792Z [info] 🔍 Using optimized search term: "Labeled Item - Text Identification Required" for item: Labeled Item - Text Identification Required
+2025-08-24T23:28:56.792Z [info] 🚀 Starting comprehensive eBay data collection...
+2025-08-24T23:28:56.792Z [info] 📊 Progress: 0% - Initializing data sources...
+2025-08-24T23:28:56.792Z [info] 🔄 [1/8] Trying data source: eBay Direct with REAL DATA priority
+2025-08-24T23:28:56.792Z [info] 📊 Progress: 6% - eBay Direct
+2025-08-24T23:28:56.792Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Labeled%20Item%20-%20Text%20Identification%20Required
+2025-08-24T23:28:56.793Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:28:56.793Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:28:56.834Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:56.834Z [info] ⏳ Waiting 3914ms before retry...
+2025-08-24T23:28:58.138Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Document%20or%20Certificate%20-%20Content%20Analysis%20Needed
+2025-08-24T23:28:58.138Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:28:58.138Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:28:58.164Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:28:58.164Z [info] ⏳ Waiting 8074ms before retry...
+2025-08-24T23:29:00.337Z [info] 🔄 Scraping attempt 3/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required&LH_Sold=1&LH_Complete=1
+2025-08-24T23:29:00.337Z [info] ⏱️ Timeout: 25000ms, Attempt: 3/3
+2025-08-24T23:29:00.337Z [info] 🌐 Scraping with enhanced anti-detection (attempt 3)
+2025-08-24T23:29:00.352Z [warning] Scraping attempt 3 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:00.352Z [error] ❌ All scraping attempts failed for https://www.ebay.com/sch/i.html?_nkw=Text-Based%20Collectible%20-%20Reading%20Required&LH_Sold=1&LH_Complete=1
+2025-08-24T23:29:00.352Z [info] 🔄 [3/8] Trying data source: Alternative Queries with REAL DATA priority
+2025-08-24T23:29:00.352Z [info] 📊 Progress: 19% - Alternative Queries
+2025-08-24T23:29:00.353Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=%22Text-Based%20Collectible%20-%20Reading%20Required%22
+2025-08-24T23:29:00.353Z [info] ⏱️ Timeout: 10000ms, Attempt: 1/3
+2025-08-24T23:29:00.353Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:29:00.502Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:00.502Z [info] ⏳ Waiting 4097ms before retry...
+2025-08-24T23:29:00.748Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Labeled%20Item%20-%20Text%20Identification%20Required
+2025-08-24T23:29:00.748Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:29:00.748Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:29:00.762Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:00.762Z [info] ⏳ Waiting 7165ms before retry...
+2025-08-24T23:29:04.598Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=%22Text-Based%20Collectible%20-%20Reading%20Required%22
+2025-08-24T23:29:04.598Z [info] ⏱️ Timeout: 10000ms, Attempt: 2/3
+2025-08-24T23:29:04.598Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:29:04.640Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:04.641Z [info] ⏳ Waiting 8975ms before retry...
+2025-08-24T23:29:06.237Z [info] 🔄 Scraping attempt 3/3: https://www.ebay.com/sch/i.html?_nkw=Document%20or%20Certificate%20-%20Content%20Analysis%20Needed
+2025-08-24T23:29:06.237Z [info] ⏱️ Timeout: 25000ms, Attempt: 3/3
+2025-08-24T23:29:06.237Z [info] 🌐 Scraping with enhanced anti-detection (attempt 3)
+2025-08-24T23:29:06.793Z [info] ❌ eBay data retrieval failed: Error: eBay primary search timeout
+    at Timeout._onTimeout (/var/task/.next/server/app/api/analyze/route.js:10328:60)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+2025-08-24T23:29:06.793Z [info] 🔄 Using final fallback: category-based market data
+2025-08-24T23:29:06.793Z [info] ✅ Generated fallback market data
+2025-08-24T23:29:06.794Z [info] 📈 eBay data for "Labeled Item - Text Identification Required": { activeListings: 24, soldItems: 4, trend: 'stable' }
+2025-08-24T23:29:06.794Z [info] 🔄 Processing item: Signed Memorabilia - Signature Verification Needed (Collectibles)
+2025-08-24T23:29:06.794Z [info] 🛒 Getting enhanced eBay data for: Signed Memorabilia - Signature Verification Needed
+2025-08-24T23:29:06.794Z [info] 🔍 Using optimized search term: "Signed Memorabilia - Signature Verification Needed" for item: Signed Memorabilia - Signature Verification Needed
+2025-08-24T23:29:06.794Z [info] 🛒 Getting enhanced eBay data for: Signed Memorabilia - Signature Verification Needed
+2025-08-24T23:29:06.794Z [info] 🔍 Using optimized search term: "Signed Memorabilia - Signature Verification Needed" for item: Signed Memorabilia - Signature Verification Needed
+2025-08-24T23:29:06.794Z [info] 🚀 Starting comprehensive eBay data collection...
+2025-08-24T23:29:06.794Z [info] 📊 Progress: 0% - Initializing data sources...
+2025-08-24T23:29:06.794Z [info] 🔄 [1/8] Trying data source: eBay Direct with REAL DATA priority
+2025-08-24T23:29:06.794Z [info] 📊 Progress: 6% - eBay Direct
+2025-08-24T23:29:06.794Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Signed%20Memorabilia%20-%20Signature%20Verification%20Needed
+2025-08-24T23:29:06.794Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:29:06.794Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:29:06.824Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:06.824Z [info] ⏳ Waiting 4051ms before retry...
+2025-08-24T23:29:07.928Z [info] 🔄 Scraping attempt 3/3: https://www.ebay.com/sch/i.html?_nkw=Labeled%20Item%20-%20Text%20Identification%20Required
+2025-08-24T23:29:07.928Z [info] ⏱️ Timeout: 25000ms, Attempt: 3/3
+2025-08-24T23:29:07.928Z [info] 🌐 Scraping with enhanced anti-detection (attempt 3)
+2025-08-24T23:29:08.148Z [warning] Scraping attempt 3 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:08.149Z [error] ❌ All scraping attempts failed for https://www.ebay.com/sch/i.html?_nkw=Labeled%20Item%20-%20Text%20Identification%20Required
+2025-08-24T23:29:08.149Z [info] 🔄 [2/8] Trying data source: eBay Sold with REAL DATA priority
+2025-08-24T23:29:08.149Z [info] 📊 Progress: 13% - eBay Sold
+2025-08-24T23:29:08.149Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Labeled%20Item%20-%20Text%20Identification%20Required&LH_Sold=1&LH_Complete=1
+2025-08-24T23:29:08.149Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:29:08.149Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:29:08.267Z [warning] Scraping attempt 3 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:08.267Z [error] ❌ All scraping attempts failed for https://www.ebay.com/sch/i.html?_nkw=Document%20or%20Certificate%20-%20Content%20Analysis%20Needed
+2025-08-24T23:29:08.267Z [info] 🔄 [2/8] Trying data source: eBay Sold with REAL DATA priority
+2025-08-24T23:29:08.267Z [info] 📊 Progress: 13% - eBay Sold
+2025-08-24T23:29:08.267Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Document%20or%20Certificate%20-%20Content%20Analysis%20Needed&LH_Sold=1&LH_Complete=1
+2025-08-24T23:29:08.267Z [info] ⏱️ Timeout: 25000ms, Attempt: 1/3
+2025-08-24T23:29:08.267Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:29:08.281Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:08.281Z [info] ⏳ Waiting 4403ms before retry...
+2025-08-24T23:29:08.532Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:08.532Z [info] ⏳ Waiting 4136ms before retry...
+2025-08-24T23:29:10.877Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Signed%20Memorabilia%20-%20Signature%20Verification%20Needed
+2025-08-24T23:29:10.877Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:29:10.877Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:29:12.631Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:12.631Z [info] ⏳ Waiting 7794ms before retry...
+2025-08-24T23:29:13.747Z [warning] Scraping attempt 3 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:13.747Z [error] ❌ All scraping attempts failed for https://www.ebay.com/sch/i.html?_nkw=%22Text-Based%20Collectible%20-%20Reading%20Required%22
+2025-08-24T23:29:13.749Z [info] 🔄 Scraping attempt 1/3: https://www.ebay.com/sch/i.html?_nkw=Text-Based%2BCollectible%2B-%2BReading%2BRequired
+2025-08-24T23:29:13.749Z [info] ⏱️ Timeout: 10000ms, Attempt: 1/3
+2025-08-24T23:29:13.749Z [info] 🌐 Scraping with enhanced anti-detection (attempt 1)
+2025-08-24T23:29:13.780Z [warning] Scraping attempt 1 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:13.780Z [info] ⏳ Waiting 3916ms before retry...
+2025-08-24T23:29:12.668Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Labeled%20Item%20-%20Text%20Identification%20Required&LH_Sold=1&LH_Complete=1
+2025-08-24T23:29:12.668Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:29:12.668Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:29:12.685Z [info] 🔄 Scraping attempt 2/3: https://www.ebay.com/sch/i.html?_nkw=Document%20or%20Certificate%20-%20Content%20Analysis%20Needed&LH_Sold=1&LH_Complete=1
+2025-08-24T23:29:12.685Z [info] ⏱️ Timeout: 25000ms, Attempt: 2/3
+2025-08-24T23:29:12.685Z [info] 🌐 Scraping with enhanced anti-detection (attempt 2)
+2025-08-24T23:29:12.710Z [warning] Scraping attempt 2 failed: Scraping request failed: ScraperAPI error: 401 Unauthorized
+2025-08-24T23:29:12.710Z [info] ⏳ Waiting 8427ms before retry...
+2025-08-24T23:29:13.616Z [info] 🔄 Scraping attempt 3/3: https://www.ebay.com/sch/i.html?_nkw=%22Text-Based%20Collectible%20-%20Reading%20Required%22
+2025-08-24T23:29:13.616Z [info] ⏱️ Timeout: 10000ms, Attempt: 3/3
+2025-08-24T23:29:13.616Z [info] 🌐 Scraping with enhanced anti-detection (attempt 3)
+2025-08-24T23:29:16.796Z [info] ❌ eBay data retrieval failed: Error: eBay primary search timeout
+    at Timeout._onTimeout (/var/task/.next/server/app/api/analyze/route.js:10328:60)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+2025-08-24T23:29:16.798Z [info] 🔄 Using final fallback: category-based market data
+2025-08-24T23:29:16.798Z [info] ✅ Generated fallback market data
+2025-08-24T23:29:16.798Z [info] 📈 eBay data for "Signed Memorabilia - Signature Verification Needed": { activeListings: 16, soldItems: 8, trend: 'declining' }
+2025-08-24T23:29:16.798Z [info] ✅ Image 1 processed successfully
+2025-08-24T23:29:16.798Z [info] 🎉 Enhanced analysis completed in 40571ms. Found 4 items with total value $600
+2025-08-24T23:29:16.798Z [info] 💾 Saving complete analysis results to database...
+2025-08-24T23:29:16.828Z [info] 🔧 Creating document in analyses: {
+  collectionName: 'analyses',
+  documentKeys: [
+    'userId',
+    'title',
+    'description',
+    'status',
+    'items',
+    'summary',
+    'metadata',
+    'createdAt',
+    'updatedAt'
+  ],
+  hasAccessToken: false,
+  accessTokenLength: 'N/A'
+}
+2025-08-24T23:29:17.037Z [info] ✅ Document created successfully in analyses with ID: new ObjectId('68aba04c68707206bccad446')
+2025-08-24T23:29:17.037Z [info] ✅ Complete analysis results saved to database: new ObjectId('68aba04c68707206bccad446')
+2025-08-24T23:29:17.037Z [info] ✅ Final result updated with database ID: 68aba04c68707206bccad446

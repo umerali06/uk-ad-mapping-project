@@ -192,6 +192,77 @@ export class InfoPanel {
     }
 
     /**
+     * Show Land Registry parcel details
+     */
+    showParcelDetails(properties) {
+        if (!this.content) return;
+        
+        this.content.innerHTML = `
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    🏠 Land Registry Parcel
+                </h3>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Title Number</label>
+                            <p class="text-gray-900">${properties.title_no || 'N/A'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Ownership Type</label>
+                            <p class="text-gray-900">${properties.ownership_type || 'Unknown'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Area</label>
+                            <p class="text-gray-900">${properties.area_hectares || 'N/A'} hectares</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Land Use</label>
+                            <p class="text-gray-900">${properties.land_use || 'Not specified'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Registered Owner</label>
+                            <p class="text-gray-900">${properties.registered_owner || 'Private'}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Registration Date</label>
+                            <p class="text-gray-900">${properties.registration_date || 'Unknown'}</p>
+                        </div>
+                        
+                        ${properties.price_paid ? `
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <label class="text-sm font-medium text-gray-700">Last Sale Price</label>
+                            <p class="text-gray-900">£${parseInt(properties.price_paid).toLocaleString()}</p>
+                        </div>
+                        ` : ''}
+                        
+                        ${properties.restrictions && properties.restrictions !== 'None' ? `
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                            <label class="text-sm font-medium text-yellow-800">Restrictions</label>
+                            <p class="text-yellow-900">${properties.restrictions}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-gray-200">
+                        <button onclick="window.APP_STATE.siteFinder?.analyzeSite('${properties.title_no}')" 
+                                class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            🎯 Analyze for AD Plant Suitability
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.show();
+    }
+
+    /**
      * Display feature information (from map clicks)
      */
     showFeatureInfo(feature) {

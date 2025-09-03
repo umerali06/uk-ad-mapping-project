@@ -10,6 +10,7 @@ import { ErrorHandler } from './utils/ErrorHandler.js';
 
 // Phase 3: Advanced Features
 import { LandRegistryManager } from './components/LandRegistryManager.js';
+import { AuthManager } from './components/AuthManager.js';
 import { PaymentManager } from './components/PaymentManager.js';
 import { PerformanceManager } from './components/PerformanceManager.js';
 import { AnalyticsManager } from './components/AnalyticsManager.js';
@@ -28,6 +29,7 @@ window.APP_STATE = {
     
     // Phase 3: Advanced Features
             landRegistryManager: null,
+        authManager: null,
         paymentManager: null,
         performanceManager: null,
         analyticsManager: null,
@@ -87,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Phase 3: Initialize Advanced Features
         const landRegistryManager = new LandRegistryManager();
+        const authManager = new AuthManager();
         const paymentManager = new PaymentManager();
         const performanceManager = new PerformanceManager(mapManager);
         const analyticsManager = new AnalyticsManager();
@@ -94,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Store Phase 3 components in global state
         window.APP_STATE.landRegistryManager = landRegistryManager;
+        window.APP_STATE.authManager = authManager;
         window.APP_STATE.paymentManager = paymentManager;
         window.APP_STATE.performanceManager = performanceManager;
         window.APP_STATE.analyticsManager = analyticsManager;
@@ -101,6 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Initialize Phase 3 components
         await landRegistryManager.initialize();
+        await authManager.initialize();
         await paymentManager.initialize();
         // PerformanceManager initializes itself in constructor
         await analyticsManager.initialize();
@@ -155,12 +160,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Site finder button click handler
+// UI Event Handlers
 document.addEventListener('DOMContentLoaded', () => {
+    // Site finder button click handler
     const siteFinderBtn = document.getElementById('site-finder-btn');
     if (siteFinderBtn) {
         siteFinderBtn.addEventListener('click', async () => {
             try {
+                // Check authentication for premium features
+                const authManager = window.APP_STATE.authManager;
+                if (authManager && !authManager.requireAuth('advanced_site_finder', 'Advanced Site Finder requires premium access')) {
+                    return;
+                }
+                
                 const siteFinder = window.APP_STATE.siteFinder;
                 const infoPanel = window.APP_STATE.infoPanel;
                 
@@ -179,6 +191,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const infoPanel = window.APP_STATE.infoPanel;
                 if (infoPanel) {
                     infoPanel.showError(`Site finder error: ${error.message}`);
+                }
+            }
+        });
+    }
+    
+    // Auth login button click handler
+    const authLoginBtn = document.getElementById('auth-login-btn');
+    if (authLoginBtn) {
+        authLoginBtn.addEventListener('click', () => {
+            const authManager = window.APP_STATE.authManager;
+            if (authManager) {
+                if (authManager.isAuthenticated) {
+                    // If already logged in, show user menu or logout
+                    authManager.logout();
+                } else {
+                    // Show login modal
+                    authManager.showLoginModal();
                 }
             }
         });
